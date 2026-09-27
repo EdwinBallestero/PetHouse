@@ -1,10 +1,17 @@
+
+
 using PetHouse.Infraestructure.Models;
 
-namespace PetHouse.Infraestructure.Repository.Interfaces;
+namespace PetHouse.Infrastructure.Repository.Interfaces
+{
+    public interface IEmpleadoRepository
+    {
+        Task<IEnumerable<Empleados>> GetAllAsync();
 
-public interface IEmpleadosRepository
-{ 
-    Task<Empleados?> GetByUsuarioIdAsync(int usuarioId);
+        Task<Empleados?> GetByIdAsync(int id);
+        Task<Empleados> AddAsync(Empleados empleado);
+        Task<Empleados> UpdateAsync(Empleados empleado);
 
-    Task<IEnumerable<Empleados>> GetBySucursalIdAsync(int sucursalId);
-}   
+        Task<bool> DeleteAsync(int id);
+    }
+}

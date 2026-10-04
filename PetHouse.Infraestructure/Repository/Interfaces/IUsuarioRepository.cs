@@ -1,14 +1,20 @@
 ﻿using PetHouse.Infraestructure.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace PetHouse.Infrastructure.Repository.Interfaces
+
+namespace PetHouse.Infraestructure.Repository.Interfaces
 {
     public interface IUsuarioRepository
     {
-        Task<IEnumerable<Usuarios>> GetAllAsync();
+        Task<ICollection<Usuarios>> GetAllAsync();
 
         Task<Usuarios?> GetByIdAsync(int id);
 
-        Task<Usuarios> AddAsync(Usuarios usuario);
+        Task<Usuarios> InsertAsync(Usuarios usuario);
 
         Task<Usuarios> UpdateAsync(Usuarios usuario);
 

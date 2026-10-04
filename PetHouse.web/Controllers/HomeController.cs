@@ -15,6 +15,7 @@ namespace PetHouse.web.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Title"] = "Home";
             return View();
         }
 

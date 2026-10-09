@@ -333,6 +333,10 @@ public partial class PetHouseContext : DbContext
 
             entity.Property(e => e.Activo).HasDefaultValue(true);
             entity.Property(e => e.Descripcion).HasMaxLength(300);
+            entity.Property(e => e.ImagenUrl)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("imagen_url");
             entity.Property(e => e.Marca).HasMaxLength(80);
             entity.Property(e => e.Nombre).HasMaxLength(120);
             entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
@@ -367,10 +371,10 @@ public partial class PetHouseContext : DbContext
             entity.HasKey(e => e.ReservaId);
 
             entity.ToTable(tb =>
-                {
-                    tb.HasTrigger("TR_Reservas_EvitarBloqueos");
-                    tb.HasTrigger("TR_Reservas_EvitarSolapamiento");
-                });
+            {
+                tb.HasTrigger("TR_Reservas_EvitarBloqueos");
+                tb.HasTrigger("TR_Reservas_EvitarSolapamiento");
+            });
 
             entity.HasIndex(e => new { e.EmpleadoId, e.FechaReserva, e.HoraInicio }, "IX_Reservas_Empleado_Fecha");
 
@@ -460,6 +464,10 @@ public partial class PetHouseContext : DbContext
 
             entity.Property(e => e.Activo).HasDefaultValue(true);
             entity.Property(e => e.Descripcion).HasMaxLength(300);
+            entity.Property(e => e.ImagenUrl)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("imagen_url");
             entity.Property(e => e.Nombre).HasMaxLength(120);
             entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.TamanoMascota)

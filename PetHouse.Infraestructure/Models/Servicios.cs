@@ -23,6 +23,8 @@ public partial class Servicios
 
     public bool Activo { get; set; }
 
+    public string? ImagenUrl { get; set; }
+
     public virtual CategoriasServicio CategoriaServicio { get; set; } = null!;
 
     public virtual ICollection<FacturaDetalles> FacturaDetalles { get; set; } = new List<FacturaDetalles>();

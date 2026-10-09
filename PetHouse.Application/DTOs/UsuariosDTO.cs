@@ -1,6 +1,7 @@
 ﻿using PetHouse.Infraestructure.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,12 @@ namespace PetHouse.Application.DTOs
 {
     public record UsuariosDTO
     {
+        [Display(Name = "Código")]
         public int UsuarioId { get; set; }
 
         public int RoleId { get; set; }
-
+        
+        [Display(Name = "Nombre")]
         public string Nombre { get; set; } = null!;
 
         public string Apellidos { get; set; } = null!;
@@ -31,6 +34,7 @@ namespace PetHouse.Application.DTOs
 
         public DateTime FechaRegistro { get; set; }
 
+        [Display(Name = "Cédula")]
         public string Cedula { get; set; } = null!;
 
         public virtual Empleados? Empleados { get; set; }

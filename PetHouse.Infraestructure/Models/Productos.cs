@@ -23,6 +23,8 @@ public partial class Productos
 
     public bool Activo { get; set; }
 
+    public string? ImagenUrl { get; set; }
+
     public virtual CategoriasProducto CategoriaProducto { get; set; } = null!;
 
     public virtual ICollection<FacturaDetalles> FacturaDetalles { get; set; } = new List<FacturaDetalles>();

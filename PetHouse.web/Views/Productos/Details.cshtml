@@ -1,0 +1,154 @@
+﻿@model PetHouse.Application.DTOs.ProductosDTO
+
+@{
+    ViewData["Title"] = "Detalle del producto";
+}
+
+<div class="container py-4">
+    <!-- Encabezado y Navegación -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <a asp-action="Index" class="text-decoration-none text-muted small fw-semibold">
+                <i class="bi bi-arrow-left me-1"></i> Volver a la lista de productos
+            </a>
+            <h2 class="fw-bold text-dark mt-1 mb-0">Detalle del Producto</h2>
+        </div>
+        <div class="d-flex gap-2 mt-2 mt-md-0">
+            <a asp-action="Edit" asp-route-id="@Model.ProductoId" class="btn btn-primary px-4 shadow-sm">
+                <i class="bi bi-pencil-square me-1"></i> Editar
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary px-3">
+                <i class="bi bi-x-lg"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Tarjeta Principal -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-4 p-lg-5">
+            <div class="row g-5 align-items-start">
+
+                <!-- Columna Izquierda: Imagen y Estado -->
+                <div class="col-lg-5 text-center">
+                    <div class="position-relative bg-light rounded-4 p-4 border border-light-subtle d-flex align-items-center justify-content-center" style="min-height: 320px;">
+                        <!-- Badge de Estado Activo/Inactivo -->
+                        <div class="position-absolute top-0 start-0 m-3">
+                            @if (Model.Activo)
+                            {
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold border border-success-subtle">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Activo
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill fw-semibold border border-secondary-subtle">
+                                    <i class="bi bi-dash-circle-fill me-1"></i> Inactivo
+                                </span>
+                            }
+                        </div>
+
+                        <!-- Imagen del Producto -->
+                        @if (!string.IsNullOrWhiteSpace(Model.ImagenUrl))
+                        {
+                            <img src="@Model.ImagenUrl"
+                                 alt="@Model.Nombre"
+                                 class="img-fluid rounded-3 shadow-sm"
+                                 style="max-height: 280px; object-fit: contain;"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                            <div class="align-items-center justify-content-center flex-column text-muted" style="display:none; min-height: 250px;">
+                                <i class="bi bi-image text-muted fs-1 mb-2"></i>
+                                <span class="small">Imagen no disponible</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center flex-column text-muted py-5">
+                                <i class="bi bi-box-seam display-4 text-secondary opacity-50 mb-2"></i>
+                                <span class="small text-muted">Sin imagen registrada</span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Código del producto sutil debajo de la imagen -->
+                    <div class="text-muted small mt-2 font-monospace">
+                        ID: <span class="fw-bold">@Model.ProductoId</span>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Información del Producto -->
+                <div class="col-lg-7">
+
+                    <!-- Nombre y Categoría -->
+                    <div class="mb-3">
+                        <span class="text-uppercase text-primary fw-bold small tracking-wide">
+                            @(Model.NombreCategoria ?? "Sin categoría")
+                        </span>
+                        <h1 class="fw-bold text-dark display-6 mb-2">@Model.Nombre</h1>
+                        @if (!string.IsNullOrWhiteSpace(Model.Marca))
+                        {
+                            <div class="text-muted">
+                                Marca: <span class="text-dark fw-semibold">@Model.Marca</span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Precio Destacado -->
+                    <div class="bg-light rounded-3 p-3 mb-4 d-flex align-items-center justify-content-between border border-light-subtle">
+                        <div>
+                            <span class="text-muted small d-block">Precio de Venta</span>
+                            <span class="fs-3 fw-bold text-success">@Model.Precio.ToString("C2")</span>
+                        </div>
+                        <div class="text-end">
+                            <span class="text-muted small d-block">Disponibilidad</span>
+                            @if (Model.Stock <= Model.StockMinimo)
+                            {
+                                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning-subtle fw-semibold px-2 py-1">
+                                    <i class="bi bi-exclamation-triangle me-1"></i> Stock bajo (@Model.Stock un.)
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info bg-opacity-10 text-info border border-info-subtle fw-semibold px-2 py-1">
+                                    <i class="bi bi-check2-all me-1"></i> En Stock (@Model.Stock un.)
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Detalles Grid (Stock mínimo y Marca o extras) -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6">
+                            <div class="p-3 border rounded-3 bg-white h-100">
+                                <div class="text-muted small mb-1">
+                                    <i class="bi bi-boxes me-1 text-primary"></i> Existencias en inventario
+                                </div>
+                                <div class="fw-bold text-dark fs-5">@Model.Stock <span class="fs-6 fw-normal text-muted">unidades</span></div>
+                                <div class="text-muted small mt-1">Stock mínimo requerido: @Model.StockMinimo</div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="p-3 border rounded-3 bg-white h-100">
+                                <div class="text-muted small mb-1">
+                                    <i class="bi bi-tag me-1 text-primary"></i> Marca del producto
+                                </div>
+                                <div class="fw-bold text-dark fs-5">@(Model.Marca ?? "No especificada")</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="mb-4">
+                        <h6 class="fw-bold text-dark mb-2">
+                            <i class="bi bi-card-text me-1 text-primary"></i> Descripción
+                        </h6>
+                        <div class="p-3 bg-white border rounded-3 text-secondary">
+                            @(string.IsNullOrWhiteSpace(Model.Descripcion) ? "El producto no cuenta con una descripción detallada." : Model.Descripcion)
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

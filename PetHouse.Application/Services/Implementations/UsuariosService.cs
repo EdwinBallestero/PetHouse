@@ -159,5 +159,15 @@ namespace PetHouse.Application.Services.Implementations
             if (string.IsNullOrWhiteSpace(dto.Cedula))
                 throw new InvalidOperationException("La cédula es obligatoria.");
         }
+
+        public Task<UsuariosDTO> InsertAsync(Usuarios usuario)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<UsuariosDTO> UpdateAsync(Usuarios usuario)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

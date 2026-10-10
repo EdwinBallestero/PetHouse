@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // MVC: controladores y vistas
 builder.Services.AddControllersWithViews();
 
+
 // Cliente HTTP para consumir PetHouse.WebAPI
 var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
 
@@ -18,6 +19,12 @@ if (string.IsNullOrWhiteSpace(apiBaseUrl))
 builder.Services.AddHttpClient<UsuarioApiService>(client =>
 {
     client.BaseAddress = new Uri(apiBaseUrl);
+});
+
+builder.Services.AddHttpClient<ProductoApiService>(client =>
+{
+    client.BaseAddress = new Uri(
+        builder.Configuration["ApiSettings:BaseUrl"]!);
 });
 
 var app = builder.Build();

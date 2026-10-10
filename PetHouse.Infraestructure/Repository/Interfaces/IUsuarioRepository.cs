@@ -10,6 +10,7 @@ namespace PetHouse.Infraestructure.Repository.Interfaces
         Task<Usuarios?> GetByCedulaAsync(string cedula);
         Task<Usuarios> InsertAsync(Usuarios usuario);
         Task<Usuarios> UpdateAsync(Usuarios usuario);
+        Task<bool> UpdatePasswordAsync(int id, string passwordHash);
         Task<bool> DeleteAsync(int id);
     }
 }

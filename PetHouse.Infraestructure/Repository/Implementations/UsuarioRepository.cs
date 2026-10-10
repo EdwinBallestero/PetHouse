@@ -80,6 +80,16 @@ namespace PetHouse.Infraestructure.Repository.Implementations
             return existing;
         }
 
+        public async Task<bool> UpdatePasswordAsync(int id, string passwordHash)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null) return false;
+
+            usuario.Password = passwordHash;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> DeleteAsync(int id)
         {
             var usuario = await _context.Usuarios.FindAsync(id);

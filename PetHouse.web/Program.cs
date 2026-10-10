@@ -1,63 +1,44 @@
-using Microsoft.EntityFrameworkCore;
-using PetHouse.Application.Profiles;
-using PetHouse.Application.Services.Implementations;
-using PetHouse.Application.Services.Interfaces;
-using PetHouse.Infraestructure.Data;
-using PetHouse.Infraestructure.Repository.Interfaces;
-using PetHouse.Infrastructure.Repository.Implementations;
-using Microsoft.OpenApi;
+
+using PetHouse.web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Servicios para controladores
-builder.Services.AddControllers();
+// MVC: controladores y vistas
+builder.Services.AddControllersWithViews();
 
-// Repositorios
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+// Cliente HTTP para consumir PetHouse.WebAPI
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
 
-// Servicios
-builder.Services.AddScoped<IUsuariosService, UsuariosService>();
-
-// AutoMapper
-builder.Services.AddAutoMapper(config =>
+if (string.IsNullOrWhiteSpace(apiBaseUrl))
 {
-    config.AddProfile<UsuariosProfile>();
-});
+    throw new InvalidOperationException(
+        "No se configuró ApiSettings:BaseUrl en appsettings.json.");
+}
 
-// Base de datos
-builder.Services.AddDbContext<PetHouseContext>(options =>
+builder.Services.AddHttpClient<UsuarioApiService>(client =>
 {
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("SqlServerDataBase"));
-});
-
-// Configuración de Swagger mejorada
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "PetHouse WebAPI",
-        Version = "v1",
-        Description = "API para gestión de usuarios y recursos de PetHouse"
-    });
-    // Si necesitas autenticación, puedes agregar configuraciones aquí
+    client.BaseAddress = new Uri(apiBaseUrl);
 });
 
 var app = builder.Build();
 
-// Habilitar Swagger siempre (puedes limitarlo a desarrollo si prefieres)
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+// Manejo de errores
+if (!app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PetHouse WebAPI v1");
-    c.RoutePrefix = "swagger"; // Acceso en /swagger
-});
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllers();
+// Ruta MVC predeterminada
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

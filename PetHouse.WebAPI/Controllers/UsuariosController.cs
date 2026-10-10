@@ -22,36 +22,61 @@ namespace PetHouse.WebAPI.Controllers
             return Ok(usuarios);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<UsuariosDTO>> GetById(int id)
         {
             var usuario = await _usuariosService.GetByIdAsync(id);
             if (usuario == null)
                 return NotFound();
+
             return Ok(usuario);
         }
 
         [HttpPost]
         public async Task<ActionResult<UsuariosDTO>> Create([FromBody] UsuariosDTO dto)
         {
-            var created = await _usuariosService.InsertAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            try
+            {
+                var created = await _usuariosService.InsertAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = created.UsuarioId }, created);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UsuariosDTO dto)
         {
-            if (id != dto.Id)
-                return BadRequest();
+            if (id != dto.UsuarioId)
+                return BadRequest(new { mensaje = "El id de la ruta no coincide con el del cuerpo." });
 
-            var updated = await _usuariosService.UpdateAsync(dto);
-            if (updated == null)
-                return NotFound();
+            try
+            {
+                var updated = await _usuariosService.UpdateAsync(dto);
+                if (updated == null)
+                    return NotFound();
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
         }
 
-        [HttpDelete("{id}")]
+        [HttpPost("login")]
+        public async Task<ActionResult<UsuariosDTO>> Login([FromBody] UsuariosDTO dto)
+        {
+            var usuario = await _usuariosService.LoginAsync(dto);
+            if (usuario == null)
+                return Unauthorized(new { mensaje = "Correo o contraseña incorrectos." });
+
+            return Ok(usuario);
+        }
+
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _usuariosService.DeleteAsync(id);

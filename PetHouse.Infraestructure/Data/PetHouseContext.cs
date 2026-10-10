@@ -66,6 +66,8 @@ public partial class PetHouseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Modern_Spanish_CI_AS");
+
         modelBuilder.Entity<BloqueosHorario>(entity =>
         {
             entity.HasKey(e => e.BloqueoId);
@@ -371,10 +373,10 @@ public partial class PetHouseContext : DbContext
             entity.HasKey(e => e.ReservaId);
 
             entity.ToTable(tb =>
-            {
-                tb.HasTrigger("TR_Reservas_EvitarBloqueos");
-                tb.HasTrigger("TR_Reservas_EvitarSolapamiento");
-            });
+                {
+                    tb.HasTrigger("TR_Reservas_EvitarBloqueos");
+                    tb.HasTrigger("TR_Reservas_EvitarSolapamiento");
+                });
 
             entity.HasIndex(e => new { e.EmpleadoId, e.FechaReserva, e.HoraInicio }, "IX_Reservas_Empleado_Fecha");
 

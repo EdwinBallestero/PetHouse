@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using PetHouse.Application.DTOs;
 using PetHouse.Infraestructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetHouse.Application.Profiles
 {
@@ -13,8 +8,14 @@ namespace PetHouse.Application.Profiles
     {
         public UsuariosProfile()
         {
-            CreateMap<Usuarios, UsuariosDTO>().ReverseMap();
+            // Entidad -> DTO: la contraseña nunca sale
+            CreateMap<Usuarios, UsuariosDTO>()
+                .ForMember(d => d.Password, o => o.Ignore());
+
+            // DTO -> Entidad: el hash lo pone el servicio
+            CreateMap<UsuariosDTO, Usuarios>()
+                .ForMember(d => d.Password, o => o.Ignore())
+                .ForMember(d => d.Role, o => o.Ignore());
         }
     }
-}   
-
+}

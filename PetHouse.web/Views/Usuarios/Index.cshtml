@@ -1,64 +1,125 @@
 ﻿@model IEnumerable<PetHouse.Application.DTOs.UsuariosDTO>
 
-<h1>@ViewBag.Titulo</h1>
-<br />
-<div class="d-flex flex-column align-items-end gap-2 mb-3">
-    <a asp-action="Create" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Nuevo
-    </a>
-</div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cedula)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Correo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UsuarioId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cedula)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nombre) @Html.DisplayFor(modelItem => item.Apellidos)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Correo)
-                </td>
-                <td class="text-center">
-                    <a asp-action="Edit" asp-route-id="@item.UsuarioId"
-                       class="btn btn-sm btn-outline-warning" title="Editar">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a asp-action="Details" asp-route-id="@item.UsuarioId"
-                       class="btn btn-sm btn-outline-info" title="Detalles">
-                        <i class="bi bi-eye"></i>
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@item.UsuarioId"
-                       class="btn btn-sm btn-outline-danger" title="Eliminar">
-                        <i class="bi bi-trash"></i>
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<div class="d-flex flex-column align-items-end gap-2 mb-3">
-    <a class="btn btn-success" asp-controller="Usuarios" asp-action="Enviar">Enviar</a>
+@{
+    ViewData["Title"] = "Mantenimiento de usuarios";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="mb-1">Mantenimiento de usuarios</h2>
+            <p class="text-muted mb-0">
+                Consulta de los usuarios registrados en PetHouse.
+            </p>
+        </div>
+
+        <div>
+            <span class="badge rounded-pill text-bg-light border px-3 py-2">
+                <i class="bi bi-people me-1"></i>
+                Total: @(Model?.Count() ?? 0)
+            </span>
+        </div>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            @ViewBag.Error
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar"></button>
+        </div>
+    }
+
+    <div class="card card-pethouse">
+        <div class="card-header bg-white border-bottom p-3">
+            <h5 class="mb-0">
+                <i class="bi bi-person-lines-fill me-2"></i>
+                Listado de usuarios
+            </h5>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-pethouse">
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre completo</th>
+                            <th>Cédula</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var usuario in Model)
+                            {
+                                <tr>
+                                    <td>@usuario.UsuarioId</td>
+
+                                    <td class="fw-semibold">
+                                        @usuario.Nombre @usuario.Apellidos
+                                    </td>
+
+                                    <td>@usuario.Cedula</td>
+                                    <td>@usuario.Correo</td>
+                                    <td>@usuario.Telefono</td>
+
+                                    <td>
+                                        @(usuario.RoleNombre ?? usuario.RoleId.ToString())
+                                    </td>
+
+                                    <td>
+                                        @if (usuario.Activo)
+                                        {
+                                            <span class="badge rounded-pill text-bg-success">
+                                                Activo
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill text-bg-secondary">
+                                                Inactivo
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a asp-action="Details"
+                                           asp-route-id="@usuario.UsuarioId"
+                                           class="btn btn-sm btn-outline-info"
+                                           title="Ver detalles">
+                                            <i class="bi bi-eye me-1"></i>
+                                            Detalles
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="bi bi-inbox fs-2 text-muted d-block mb-2"></i>
+                                    <span class="text-muted">
+                                        No hay usuarios para mostrar.
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>

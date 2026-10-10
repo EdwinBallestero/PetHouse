@@ -1,27 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-namespace PetHouse.Application.DTOs
+namespace PetHouse.web.Models
 {
-    public class UsuariosDTO
+    public class UsuarioViewModel
     {
-        [Display(Name = "Código")]
         public int UsuarioId { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccione un rol.")]
         [Display(Name = "Rol")]
         public int RoleId { get; set; }
 
         [Display(Name = "Rol")]
         public string? RoleNombre { get; set; }
 
+        [Required(ErrorMessage = "El nombre es obligatorio.")]
         public string Nombre { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Los apellidos son obligatorios.")]
         public string Apellidos { get; set; } = string.Empty;
 
         [Display(Name = "Teléfono")]
         public string? Telefono { get; set; }
 
-        [Required, EmailAddress]
+        [Required(ErrorMessage = "El correo es obligatorio.")]
+        [EmailAddress(ErrorMessage = "El correo no es válido.")]
         public string Correo { get; set; } = string.Empty;
 
         [Display(Name = "Dirección")]
@@ -30,17 +32,17 @@ namespace PetHouse.Application.DTOs
         [Display(Name = "Fecha de nacimiento")]
         public DateOnly? FechaNacimiento { get; set; }
 
+        [Required(ErrorMessage = "La cédula es obligatoria.")]
         [Display(Name = "Cédula")]
         public string Cedula { get; set; } = string.Empty;
 
-        public bool Activo { get; set; }
+        public bool Activo { get; set; } = true;
 
         [Display(Name = "Fecha de registro")]
         public DateTime FechaRegistro { get; set; }
 
-        // Solo de entrada (registro, login, cambio de clave).
-        // Siempre sale null y por eso no aparece en el JSON de respuesta.
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Contraseña")]
         public string? Password { get; set; }
     }
 }

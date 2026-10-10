@@ -1,30 +1,109 @@
-html {
-    font-size: 14px;
+
+/* ========================================
+   PET HOUSE - TEMA VERDE AZULADO
+   ======================================== */
+
+:root {
+    --pet-primary: #0F766E;
+    --pet-primary-dark: #134E4A;
+    --pet-primary-light: #CCFBF1;
+    --pet-background: #F1F5F9;
+    --pet-surface: #FFFFFF;
+    --pet-text: #334155;
+    --pet-muted: #64748B;
+    --pet-border: #E2E8F0;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
+/* Fondo y tipografía general */
 body {
-    margin-bottom: 60px;
+    background-color: var(--pet-background);
+    color: var(--pet-text);
+    font-family: "Segoe UI", Arial, sans-serif;
 }
 
-/*.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
-}*/
+/* Navbar */
+.navbar-pethouse {
+    background-color: var(--pet-primary-dark);
+    box-shadow: 0 2px 8px rgba(15, 78, 74, 0.12);
+}
+
+    .navbar-pethouse .navbar-brand {
+        color: #FFFFFF;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+    .navbar-pethouse .nav-link {
+        color: #E2F5F2;
+        transition: color 0.2s ease;
+    }
+
+        .navbar-pethouse .nav-link:hover,
+        .navbar-pethouse .nav-link:focus {
+            color: #FFFFFF;
+        }
+
+    .navbar-pethouse .dropdown-menu {
+        border: 1px solid var(--pet-border);
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    .navbar-pethouse .dropdown-item:hover {
+        background-color: var(--pet-primary-light);
+        color: var(--pet-primary-dark);
+    }
+
+/* Botones principales */
+.btn-pethouse {
+    background-color: var(--pet-primary);
+    border-color: var(--pet-primary);
+    color: #FFFFFF;
+}
+
+    .btn-pethouse:hover,
+    .btn-pethouse:focus {
+        background-color: var(--pet-primary-dark);
+        border-color: var(--pet-primary-dark);
+        color: #FFFFFF;
+    }
+
+/* Tarjetas y superficies */
+.card-pethouse {
+    background-color: var(--pet-surface);
+    border: 1px solid var(--pet-border);
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+}
+
+/* Títulos */
+h1, h2, h3 {
+    color: var(--pet-primary-dark);
+}
+
+/* Enlaces */
+a {
+    color: var(--pet-primary);
+}
+
+    a:hover {
+        color: var(--pet-primary-dark);
+    }
+
+/* Tablas */
+.table-pethouse thead th {
+    background-color: var(--pet-primary-dark);
+    color: #FFFFFF;
+    border-color: var(--pet-primary-dark);
+}
+
+.table-pethouse tbody tr:hover > * {
+    background-color: var(--pet-primary-light);
+}
+
+/* Campos de formularios */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--pet-primary);
+    box-shadow: 0 0 0 0.2rem rgba(15, 118, 110, 0.15);
+}

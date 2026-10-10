@@ -8,6 +8,7 @@
     <title>PetHouse - @ViewData["Title"]</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PetHouse.web.styles.css" asp-append-version="true" />
     <link rel="stylesheet"
@@ -56,6 +57,15 @@
                                class="nav-link text-white">
                                 <i class="bi bi-people me-2"></i>
                                 <span class="d-none d-sm-inline">Usuarios</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item w-100">
+                            <a asp-controller="Productos"
+                               asp-action="Index"
+                               class="nav-link text-white">
+                                <i class="bi bi-people me-2"></i>
+                                <span class="d-none d-sm-inline">Productos</span>
                             </a>
                         </li>
 

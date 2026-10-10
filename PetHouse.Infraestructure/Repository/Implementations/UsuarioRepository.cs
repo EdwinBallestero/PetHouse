@@ -20,7 +20,7 @@ namespace PetHouse.Infraestructure.Repository.Implementations
                 .AsNoTracking()
                 .Include(u => u.Role)
                 .Where(u => u.Activo)
-                .OrderBy(u => u.Nombre)
+                .OrderBy(u => u.UsuarioId)
                 .ThenBy(u => u.Apellidos)
                 .ToListAsync();
         }

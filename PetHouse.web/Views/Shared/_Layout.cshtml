@@ -20,17 +20,22 @@
         <div class="row flex-nowrap">
 
             <!-- Menú lateral -->
-            <aside class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 navbar-pethouse">
+             <aside class="col-auto px-sm-2 px-0 navbar-pethouse sidebar-pethouse">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-3 text-white min-vh-100">
 
                     <a asp-controller="Home"
                        asp-action="Index"
-                       class="d-flex align-items-center pb-3 mb-3 text-white text-decoration-none">
-                        <i class="bi bi-house-heart-fill fs-4 me-2"></i>
-                        <span class="fs-5 fw-bold d-none d-sm-inline">PetHouse</span>
+                       class="sidebar-brand text-white text-decoration-none"
+                       aria-label="PetHouse - Inicio">
+                        <!-- Menú colapsado (pantalla muy angosta): solo ícono -->
+                        <i class="bi bi-house-heart-fill fs-4 d-sm-none"></i>
+                        <!-- Pantallas normales: logo completo -->
+                        <img src="~/images/Logo-PetHouse (2).png"
+                             alt="PetHouse"
+                             class="sidebar-brand-logo d-none d-sm-block" />
                     </a>
 
-                    <hr class="w-100" />
+                    <hr class="w-100 my-2" />
 
                     <ul class="nav nav-pills flex-column mb-auto align-items-center align-items-sm-start w-100">
 
@@ -64,7 +69,7 @@
                             <a asp-controller="Productos"
                                asp-action="Index"
                                class="nav-link text-white">
-                                <i class="bi bi-people me-2"></i>
+                                <i class="bi bi-box-seam"></i>
                                 <span class="d-none d-sm-inline">Productos</span>
                             </a>
                         </li>

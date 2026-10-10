@@ -2,39 +2,6 @@
     ViewData["Title"] = "Inicio";
 }
 
-<!-- CSS personalizado para efectos visuales -->
-<style>
-    /* Gradient overlay sobre las imágenes del carrusel para legibilidad */
-    .carousel-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.75) 100%);
-        border-radius: 1rem;
-    }
-
-    .hero-carousel .carousel-item {
-        height: 520px;
-    }
-
-    .hero-carousel img {
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* Cards interactivos con elevación suave */
-    .feature-card {
-        transition: transform 0.3s ease, shadow 0.3s ease;
-    }
-
-        .feature-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 1rem 2rem rgba(0,0,0,0.12) !important;
-        }
-</style>
-
 <div class="container py-4">
 
     <!-- 1. Hero / Carrusel Principal -->
@@ -195,7 +162,7 @@
 
 @section Scripts {
     <script type="text/javascript">
-        // Inicialización optimizada del carrusel Bootstrap
+        // Inicialización optimizada del carrusel Bootstrap, temporizador
         const myCarouselElement = document.getElementById('pethouseCarousel');
         const carousel = new bootstrap.Carousel(myCarouselElement, {
             interval: 4000,

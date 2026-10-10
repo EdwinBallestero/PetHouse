@@ -3,7 +3,6 @@ using PetHouse.Application.DTOs;
 using PetHouse.Application.Services.Interfaces;
 using PetHouse.Infraestructure.Models;
 using PetHouse.Infraestructure.Repository.Interfaces;
-using PetHouse.Infraestructure.Repository.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,18 +35,21 @@ namespace PetHouse.Application.Services.Implementations
             // Return lista
             return collection;
         }
-        public async Task<UsuariosDTO> InsertAsync(Usuarios usuario)
+        public async Task<UsuariosDTO> InsertAsync(UsuariosDTO dto)
         {
-            var @object = await _repository.InsertAsync(usuario);
-            var objectMapped = _mapper.Map<UsuariosDTO>(@object);
-            return objectMapped;
+            var entity = _mapper.Map<Usuarios>(dto);
+            var inserted = await _repository.InsertAsync(entity);
+            return _mapper.Map<UsuariosDTO>(inserted);
         }
 
-        public async Task<UsuariosDTO> UpdateAsync(Usuarios usuario)
+        public async Task<UsuariosDTO?> UpdateAsync(UsuariosDTO dto)
         {
-            var @object = await _repository.UpdateAsync(usuario);
-            var objectMapped = _mapper.Map<UsuariosDTO>(@object);
-            return objectMapped;
+            var existing = await _repository.GetByIdAsync(dto.UsuarioId);
+            if (existing == null) return null;
+
+            var entity = _mapper.Map<Usuarios>(dto);
+            var updated = await _repository.UpdateAsync(entity);
+            return _mapper.Map<UsuariosDTO>(updated);
         }
 
         public async Task<bool> DeleteAsync(int id)

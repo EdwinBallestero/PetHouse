@@ -1,15 +1,7 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PetHouse.Infraestructure.Data;
 using PetHouse.Infraestructure.Models;
 using PetHouse.Infraestructure.Repository.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace PetHouse.Infraestructure.Repository.Implementations
 {
@@ -24,19 +16,43 @@ namespace PetHouse.Infraestructure.Repository.Implementations
 
         public async Task<ICollection<Usuarios>> GetAllAsync()
         {
-            //Select * from Usuarios
-            var collection = await _context.Set<Usuarios>().ToListAsync();
-            return collection;
+            return await _context.Usuarios
+                .AsNoTracking()
+                .Include(u => u.Role)
+                .Where(u => u.Activo)
+                .OrderBy(u => u.Nombre)
+                .ThenBy(u => u.Apellidos)
+                .ToListAsync();
         }
 
         public async Task<Usuarios?> GetByIdAsync(int id)
         {
             return await _context.Usuarios
+                .AsNoTracking()
+                .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.UsuarioId == id);
+        }
+
+        public async Task<Usuarios?> GetByCorreoAsync(string correo)
+        {
+            return await _context.Usuarios
+                .AsNoTracking()
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Correo == correo);
+        }
+
+        public async Task<Usuarios?> GetByCedulaAsync(string cedula)
+        {
+            return await _context.Usuarios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Cedula == cedula);
         }
 
         public async Task<Usuarios> InsertAsync(Usuarios usuario)
         {
+            usuario.FechaRegistro = DateTime.Now;
+            usuario.Activo = true;
+
             await _context.Usuarios.AddAsync(usuario);
             await _context.SaveChangesAsync();
             return usuario;
@@ -44,22 +60,34 @@ namespace PetHouse.Infraestructure.Repository.Implementations
 
         public async Task<Usuarios> UpdateAsync(Usuarios usuario)
         {
-            _context.Usuarios.Update(usuario);
-            await _context.SaveChangesAsync();
+            var existing = await _context.Usuarios.FindAsync(usuario.UsuarioId)
+                ?? throw new KeyNotFoundException(
+                    $"No existe el usuario con id {usuario.UsuarioId}");
 
-            return usuario;
+            // Se actualizan solo los campos editables.
+            // Password y FechaRegistro NO se tocan aquí.
+            existing.RoleId = usuario.RoleId;
+            existing.Nombre = usuario.Nombre;
+            existing.Apellidos = usuario.Apellidos;
+            existing.Telefono = usuario.Telefono;
+            existing.Correo = usuario.Correo;
+            existing.Direccion = usuario.Direccion;
+            existing.FechaNacimiento = usuario.FechaNacimiento;
+            existing.Cedula = usuario.Cedula;
+            existing.Activo = usuario.Activo;
+
+            await _context.SaveChangesAsync();
+            return existing;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var usuario = await GetByIdAsync(id);
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null) return false;
 
-            if (usuario == null)
-                return false;
-
-            _context.Usuarios.Remove(usuario);
+            // Borrado lógico: el usuario tiene mascotas, reservas y facturas
+            usuario.Activo = false;
             await _context.SaveChangesAsync();
-
             return true;
         }
     }

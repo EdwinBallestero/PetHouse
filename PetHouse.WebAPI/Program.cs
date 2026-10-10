@@ -3,25 +3,27 @@ using PetHouse.Application.Profiles;
 using PetHouse.Application.Services.Implementations;
 using PetHouse.Application.Services.Interfaces;
 using PetHouse.Infraestructure.Data;
+using PetHouse.Infraestructure.Repository.Implementations;
 using PetHouse.Infraestructure.Repository.Interfaces;
-using PetHouse.Infrastructure.Repository.Implementations;
-using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Servicios para controladores
+// Controladores
 builder.Services.AddControllers();
 
 // Repositorios
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IRolRepository, RolRepository>();
 
 // Servicios
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();
+builder.Services.AddScoped<IRolesService, RolesService>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<UsuariosProfile>();
+    config.AddProfile<RolesProfile>();
 });
 
 // Base de datos
@@ -31,33 +33,20 @@ builder.Services.AddDbContext<PetHouseContext>(options =>
         builder.Configuration.GetConnectionString("SqlServerDataBase"));
 });
 
-// Configuración de Swagger mejorada
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "PetHouse WebAPI",
-        Version = "v1",
-        Description = "API para gestión de usuarios y recursos de PetHouse"
-    });
-    // Si necesitas autenticación, puedes agregar configuraciones aquí
-});
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Habilitar Swagger siempre (puedes limitarlo a desarrollo si prefieres)
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+if (app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PetHouse WebAPI v1");
-    c.RoutePrefix = "swagger"; // Acceso en /swagger
-});
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
